@@ -57,10 +57,14 @@ app.post('/api/customers', (req, res) => {
 })
 
 //PUT changes to customer (update existing customer by id)
-app.put('/api/customers/:_id', (req, res) => {
-    var _id = req.params._id;
-    var newvalues = { $set: req.body };
-    customer_collection.updateOne({"_id": ObjectId(_id)}, newvalues, function(error, result) {
+app.put('/api/customers', (req, res) => {
+
+    var myquery = { _id: ObjectId(req.body.customer._id) };
+
+    delete req.body.customer._id;
+    var newvalues = { $set: req.body.customer };
+  
+    customer_collection.updateOne(myquery, newvalues, function(error, result) {
         if(error) {
             return res.status(500).send(error);
         }
